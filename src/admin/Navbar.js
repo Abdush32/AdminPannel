@@ -1,0 +1,102 @@
+import React, { Component } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { withRouter } from "react-router";
+
+class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  handleLogout = () => {
+    localStorage.clear();
+    this.props.history.push("/");
+  };
+
+  render() {
+    return (
+      <div>
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                <i class="fas fa-bars"></i>
+              </a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+              <a href="index3.html" class="nav-link">
+                Home
+              </a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+              <a href="#" class="nav-link">
+                Contact
+              </a>
+            </li>
+          </ul>
+
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                data-widget="navbar-search"
+                href="#"
+                role="button"
+              >
+                <i class="fas fa-search"></i>
+              </a>
+              <div class="navbar-search-block">
+                <form class="form-inline">
+                  <div class="input-group input-group-sm">
+                    <input
+                      class="form-control form-control-navbar"
+                      type="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <div class="input-group-append">
+                      <button class="btn btn-navbar" type="submit">
+                        <i class="fas fa-search"></i>
+                      </button>
+                      <button
+                        class="btn btn-navbar"
+                        type="button"
+                        data-widget="navbar-search"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                data-widget="fullscreen"
+                href="#"
+                role="button"
+              >
+                <i class="fas fa-expand-arrows-alt"></i>
+              </a>
+            </li>
+            <li class="nav-item" title="logout">
+              <Link
+                onClick={this.handleLogout}
+                class="nav-link"
+                data-widget="control-sidebar"
+                data-slide="true"
+                href="#"
+                role="button"
+              >
+                <i class="fas fa-power-off" style={{ color: "red" }}></i>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    );
+  }
+}
+export default withRouter(Navbar);
