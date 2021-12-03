@@ -16,7 +16,7 @@ class UserList extends Component {
   }
 
   componentDidMount = () => {
-    if (!localStorage.getItem("userdata")) {
+    if (!localStorage.getItem("data")) {
       this.props.history.push("/");
     }
     console.log(this.props);

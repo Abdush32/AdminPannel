@@ -65,24 +65,24 @@ class Sidebar extends Component {
                   </a>
                 </li>
                 <li className="nav-item">
-                <Link to="/UserList" className="nav-link">
+                  <Link to="/UserList" className="nav-link">
                     <i className="nav-icon fas fa-chart-pie" />
                     <p>
-                     UserList
+                      UserList
                       <i className="right fas fa-angle-left" />
                     </p>
                   </Link>
-                  </li>
+                </li>
 
                 <li className="nav-item">
                   <Link to="/UserList1" className="nav-link">
                     <i className="nav-icon fas fa-chart-pie" />
                     <p>
-                    UserList1
+                      UserList1
                       <i className="right fas fa-angle-left" />
                     </p>
                   </Link>
-                  {/* <ul className="nav nav-treeview">
+                  <ul className="nav nav-treeview">
                     <li className="nav-item">
                       <a href="pages/charts/chartjs.html" className="nav-link">
                         <i className="far fa-circle nav-icon" />
@@ -107,22 +107,22 @@ class Sidebar extends Component {
                         <p>uPlot</p>
                       </a>
                     </li>
-                  </ul> */}
+                  </ul>
                 </li>
-                {/* <li className="nav-item">
+                <li className="nav-item">
                   <a href="#" className="nav-link">
-                    <i className="nav-icon fas fa-tree" />
+                    <i className="nav-icon fas fa-blog" />
                     <p>
-                      UI Elements
+                      Blog
                       <i className="fas fa-angle-left right" />
                     </p>
                   </a>
                   <ul className="nav nav-treeview">
                     <li className="nav-item">
-                      <a href="pages/UI/general.html" className="nav-link">
+                      <Link to="/Category" className="nav-link">
                         <i className="far fa-circle nav-icon" />
-                        <p>General</p>
-                      </a>
+                        <p>Categories</p>
+                      </Link>
                     </li>
                     <li className="nav-item">
                       <a href="pages/UI/icons.html" className="nav-link">
@@ -167,15 +167,15 @@ class Sidebar extends Component {
                       </a>
                     </li>
                   </ul>
-                </li> */}
+                </li>
                 <li className="nav-item">
-                  <a href="#" className="nav-link">
-                    <i className="nav-icon fas fa-edit" />
-                    <p>
-                      Forms
+                  {/* <a href="#" className="nav-link">
+                    <i className="nav-icon fas fa-blog" />
+                    <p >
+                      Blog
                       <i className="fas fa-angle-left right" />
                     </p>
-                  </a>
+                  </a> */}
                   <ul className="nav nav-treeview">
                     <li className="nav-item">
                       <a href="pages/forms/general.html" className="nav-link">

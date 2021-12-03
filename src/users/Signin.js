@@ -9,9 +9,9 @@ export default class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      email: "",
       password: "",
-      loader: true,
+      // loader: true,
     };
   }
 
@@ -27,7 +27,6 @@ export default class Signin extends Component {
     e.preventDefault();
     console.log(this.state);
     login(this.state).then((res) => {
-      // console.log(data);
       if (res.data && res.status) {
         let userdata = {
           user_id: res.data.user_id,
@@ -40,7 +39,7 @@ export default class Signin extends Component {
 
         localStorage.setItem("data", JSON.stringify(userdata));
 
-        this.props.history.push("./userList");
+        this.props.history.push("/userList");
       } else {
         console.log("NOT");
         toast.error(res.message, {
@@ -53,7 +52,7 @@ export default class Signin extends Component {
   render() {
     let local_storagedata = localStorage.getItem("data");
     if (local_storagedata) {
-      this.props.history.push("./userList");
+      this.props.history.push("/userList");
     }
 
     return (
