@@ -10,7 +10,9 @@ import ViewProfile from "./admin/components/ViewProfile";
 import UpdateData from "./admin/components/UpdateData";
 import { ToastContainer } from "react-toastify";
 import Category from "./admin/cate/Category"
-import updateCate from "./admin/cate/updateCate"
+import singleCate from "./admin/cate/singleCate"
+import posts from "./admin/post/posts";
+
 
 const App = () => {
   return (
@@ -25,7 +27,9 @@ const App = () => {
        <Route path="/viewProfile/:id" exact component={ViewProfile} />
        <Route path="/UpdateData/:id" exact component={UpdateData} />
       <Route path="/Category" exact component={Category}/>
-      <Route path="/updateCate/:id" exact component={updateCate}/>
+      <Route path="/singleCate/:id" exact component={singleCate}/>
+      <Route path="/posts" exact component={posts}/>
+      
         </Switch>
       </BrowserRouter>
     </div>

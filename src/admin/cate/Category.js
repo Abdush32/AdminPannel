@@ -1,16 +1,57 @@
 import React, { Component } from "react";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Link } from "react-router-dom";
-import { getCategory } from "../../api/category";
+import { toast } from "react-toastify";
+import { Spinner } from "reactstrap";
+import { getCategory, delCategory, createCate } from "../../api/category";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
+import "./style/cate.css";
 
 class Category extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      cat_title: "",
       categoryList: [],
+      loader: true,
+      modal: false,
+      delmodal: false,
     };
   }
+
+  toggle = () => {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  };
+  deltoggle = () => {
+    this.setState({
+      delmodal: !this.state.delmodal,
+    });
+  };
+  handleChange = (e) => {
+    console.log(e);
+    const value = e.target.value;
+    this.setState({
+      ...this.state,
+      [e.target.name]: value,
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    createCate(this.state).then((res) => {
+      console.log(res);
+      this.setState({
+        cat_title: "",
+      });
+
+      toast.success(res.message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    });
+  };
 
   componentDidMount = () => {
     getCategory()
@@ -19,8 +60,27 @@ class Category extends Component {
         this.setState({
           categoryList: res.data.categories,
         });
+        this.setState({ loader: false });
       })
       .catch((err) => console.log(err));
+  };
+
+  handleDelete = (id) => {
+    delCategory(id).then((res) => {
+      console.log(res);
+      if (res) {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        this.setState({
+          delmodal: false,
+        });
+        this.setState({ loader: false });
+
+      } else {
+        console.log("Not Able to Delete");
+      }
+    });
   };
 
   render() {
@@ -36,17 +96,39 @@ class Category extends Component {
                   <h1>Categories</h1>
                 </div>
                 <div class="col-sm-6">
-                  <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
-                      <a href="#">Home</a>
-                    </li>
-                    <li class="breadcrumb-item active">Categories</li>
-                  </ol>
+                  <button
+                    type="button"
+                    class="btn btn-success  float-right"
+                    onClick={this.toggle}
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
             </div>
           </section>
           <section class="content">
+            <div class="row">
+              <div class="col-sm-8"></div>
+              <div class="col-sm-4">
+                <form class="">
+                  {" "}
+                  <div className="input-group input-group-sm" id="searchbox">
+                    <input
+                      className="form-control form-control-navbar  float-right"
+                      type="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                    />
+                    <div className="input-group-append">
+                      <button className="btn btn-navbar" type="submit">
+                        <i className="fas fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-12">
@@ -70,22 +152,67 @@ class Category extends Component {
                           </tr>
                         </thead>
                         <tbody>
-                          {this.state.categoryList.length > 0 &&
+                          {this.state.loader ? (
+                            <Spinner
+                              style={{
+                                width: "2rem",
+                                height: "2rem",
+                              }}
+                              children={false}
+                              class="spinner1"
+                            />
+                          ) : (
+                            this.state.categoryList.length > 0 &&
                             this.state.categoryList.map((ele, index) => (
                               <tr key={index}>
                                 <td>{ele.id}</td>
                                 <td>{ele.cat_title}</td>
                                 <td>
-                                  <Link to={`/updatecate/${ele.id}`}>
+                                  <Link to={`/singleCate/${ele.id}`}>
                                     <i class="fas fa-pen"></i>
                                   </Link>
                                   &nbsp; &nbsp; &nbsp;
-                                  <Link to="">
-                                    <i class="fa fa-trash"></i>
+                                  <Link onClick={this.deltoggle}>
+                                    <i
+                                      class="fa fa-trash"
+                                      style={{ color: "red" }}
+                                    ></i>
                                   </Link>
+                                  <div>
+                                    <Modal
+                                      isOpen={this.state.delmodal}
+                                      deltoggle={this.deltoggle}
+                                      className={this.props.className}
+                                    >
+                                      <ModalHeader deltoggle={this.deltoggle}>
+                                        Category
+                                      </ModalHeader>
+                                      <ModalBody>
+                                        <h6>Are you Sure to delete ...</h6>
+                                      </ModalBody>
+                                      <ModalFooter>
+                                        <Button
+                                          color="info"
+                                          type="submit"
+                                          onClick={() =>
+                                            this.handleDelete(ele.id)
+                                          }
+                                        >
+                                          Yes
+                                        </Button>{" "}
+                                        <Button
+                                          color="danger"
+                                          onClick={this.deltoggle}
+                                        >
+                                          No
+                                        </Button>
+                                      </ModalFooter>
+                                    </Modal>
+                                  </div>
                                 </td>
                               </tr>
-                            ))}
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>
@@ -98,16 +225,36 @@ class Category extends Component {
           </section>
         </div>
 
-        <footer class="main-footer">
-          <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.1.0
-          </div>
-          <strong>
-            Copyright &copy; 2014-2021{" "}
-            <a href="https://adminlte.io">AdminLTE.io</a>.
-          </strong>{" "}
-          All rights reserved.
-        </footer>
+        <div>
+          <Modal
+            isOpen={this.state.modal}
+            toggle={this.toggle}
+            className={this.props.className}
+          >
+            <ModalHeader toggle={this.toggle}>Category</ModalHeader>
+            <ModalBody>
+              <form onSubmit={this.handleSubmit}>
+                <div class="form-group">
+                  <label for="usr"></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="cat_title"
+                    name="cat_title"
+                    placeholder="Enter your  Category"
+                    value={this.state.cat_title}
+                    onChange={this.handleChange}
+                  />
+                </div>
+                <div class="text-center">
+                  <Button type="submit" color="danger" onClick={this.toggle}>
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </ModalBody>
+          </Modal>
+        </div>
       </div>
     );
   }

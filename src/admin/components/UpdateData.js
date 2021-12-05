@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { deleteData, getSingledata } from "../../api/userlist1Api";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 
@@ -13,28 +13,25 @@ class UpdateData extends Component {
     };
   }
 
-  componentDidMount = ()=> {
-    // console.log(this.props);
+  componentDidMount = () => {
     getSingledata(this.props.match.params.id).then((res) => {
       this.setState({
         getoneDataonly: res.data,
       });
       console.log({ getoneDataonly: res.data });
     });
-  }
+  };
 
-  handleDelete =() =>{
-    deleteData(this.props.match.params.id).then((res)=>{
+  handleDelete = () => {
+    deleteData(this.props.match.params.id).then((res) => {
       console.log(res);
-     if(res){
-      this.props.history.push("/UserList1");
-     }else{
-       console.log("not able to delete the data");
-     }
-
-    })
-  }
-
+      if (res) {
+        this.props.history.push("/UserList1");
+      } else {
+        console.log("not able to delete the data");
+      }
+    });
+  };
 
   render() {
     return (
@@ -42,8 +39,8 @@ class UpdateData extends Component {
         <Navbar />
         <Sidebar />
         <center>
-        <h3>UpdateProfile</h3>
-      </center>
+          <h3>UpdateProfile</h3>
+        </center>
         <div
           className="row d-flex justify-content-center"
           style={{ marginLeft: "450px" }}
@@ -63,8 +60,10 @@ class UpdateData extends Component {
                 </p>
                 <p className="card-text">
                   Status:{this.state.getoneDataonly.status}
-                </p>               
-                <button className="btn btn-danger" onClick={this.handleDelete}>update</button>
+                </p>
+                <button className="btn btn-danger" onClick={this.handleDelete}>
+                  update
+                </button>
               </div>
             </div>
           </div>

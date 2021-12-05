@@ -44,7 +44,7 @@ componentDidMount = () => {
                           type="email"
                           class="form-control"
                           id="enterCategory"
-                          placeholder="Enter email"
+                          placeholder="Enter email" 
                           value={this.state.getSingleCate}
                         />
                       </div>

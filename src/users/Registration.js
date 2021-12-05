@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Spinner } from "reactstrap";
 
-
 export default class Registration extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +50,6 @@ export default class Registration extends Component {
       });
       if (res && res.error) {
         this.props.history.push("/Signup");
-        
       } else {
         this.props.history.push("/Signin");
       }
@@ -173,27 +171,26 @@ export default class Registration extends Component {
                     name=" profile_pic_path"
                     id=" profile_pic_path"
                     required="required"
-                    
                     onChange={this.onFileChange}
                   />
                 </div>
                 <div>
-                            {!this.state.imagepath ? (
-                              this.state.loader && (
-                                <Spinner
-                                  style={{ width: "1rem", height: "1rem" }}
-                                  children={false}
-                                />
-                              )
-                            ) : (
-                              <img
-                                src={this.state.imagepath}
-                                width="200px"
-                                height="200px"
-                                class="img-thumbnail"
-                              />
-                            )}
-                          </div>
+                  {!this.state.imagepath ? (
+                    this.state.loader && (
+                      <Spinner
+                        style={{ width: "1rem", height: "1rem" }}
+                        children={false}
+                      />
+                    )
+                  ) : (
+                    <img
+                      src={this.state.imagepath}
+                      width="200px"
+                      height="200px"
+                      class="img-thumbnail"
+                    />
+                  )}
+                </div>
                 <button type="submit" class="btn btn-secondary">
                   Register
                 </button>
