@@ -51,7 +51,7 @@ export const singleCategory = (id) => {
     .catch((err) => console.log(err));
 };
 
-export const updateCategory = (id) => {
+export const updateCategory = (cate) => {
   return fetch(`${baseUrl}/update_category`, {
     method: "PUT",
     headers: {
@@ -59,6 +59,8 @@ export const updateCategory = (id) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+
+    body: JSON.stringify(cate),
   })
     .then((res) => {
       console.log(res);

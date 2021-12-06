@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Spinner } from "reactstrap";
 import { singleCategory, updateCategory } from "../../api/category";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 
@@ -11,12 +13,15 @@ class singleCate extends Component {
       getSingleCate: [],
       loader: true,
       cat_title: "",
+      cat_id: "",
     };
   }
 
   handChange = (e) => {
+    const value = e.target.value;
     this.setState({
-      getSingleCate: e.target.value,
+      ...this.state,
+      [e.target.name]: value,
     });
   };
 
@@ -24,7 +29,8 @@ class singleCate extends Component {
     singleCategory(this.props.match.params.id).then((res) => {
       console.log(res);
       this.setState({
-        getSingleCate: res.category.cat_title,
+        cat_title: res.category.cat_title,
+        cat_id: res.category.id,
         loader: false,
       });
     });
@@ -32,8 +38,20 @@ class singleCate extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    updateCategory(this.props.match.params.id).then((res) => {
+    console.log(this.state);
+    updateCategory(this.state).then((res) => {
       console.log(res);
+      if (res) {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        this.props.history.push("/Category");
+      } else {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        console.log("Cant Update Data..");
+      }
     });
   };
 
@@ -63,15 +81,27 @@ class singleCate extends Component {
                             class="spinner1"
                           />
                         ) : (
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cat_title"
-                            name="cat_title"
-                            placeholder="Enter cat_title"
-                            value={this.state.getSingleCate}
-                            onChange={this.handChange}
-                          />
+                          ((
+                            <input
+                              type="hidden"
+                              class="form-control"
+                              id="cat_id"
+                              name="cat_id"
+                              value={this.state.cat_id}
+                              onChange={this.handChange}
+                            />
+                          ),
+                          (
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="cat_title"
+                              name="cat_title"
+                              placeholder="Enter cat_title"
+                              value={this.state.cat_title}
+                              onChange={this.handChange}
+                            />
+                          ))
                         )}
                       </div>
                     </div>

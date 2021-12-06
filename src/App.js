@@ -9,27 +9,25 @@ import UserList1 from "./admin/components/UserList1";
 import ViewProfile from "./admin/components/ViewProfile";
 import UpdateData from "./admin/components/UpdateData";
 import { ToastContainer } from "react-toastify";
-import Category from "./admin/cate/Category"
-import singleCate from "./admin/cate/singleCate"
+import Category from "./admin/cate/Category";
+import singleCate from "./admin/cate/singleCate";
 import posts from "./admin/post/posts";
-
 
 const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-      <ToastContainer />
+        <ToastContainer />
         <Switch>
-        <Route path="/" exact component={Registration} />
-        <Route path="/signin" exact component={signin} />
-        <Route path="/userList" exact component={UserList} />
-       <Route path="/UserList1" exact component={UserList1} />
-       <Route path="/viewProfile/:id" exact component={ViewProfile} />
-       <Route path="/UpdateData/:id" exact component={UpdateData} />
-      <Route path="/Category" exact component={Category}/>
-      <Route path="/singleCate/:id" exact component={singleCate}/>
-      <Route path="/posts" exact component={posts}/>
-      
+          <Route path="/" exact component={Registration} />
+          <Route path="/signin" exact component={signin} />
+          <Route path="/userList" exact component={UserList} />
+          <Route path="/UserList1" exact component={UserList1} />
+          <Route path="/viewProfile/:id" exact component={ViewProfile} />
+          <Route path="/UpdateData/:id" exact component={UpdateData} />
+          <Route path="/Category" exact component={Category} />
+          <Route path="/singleCate/:id" exact component={singleCate} />
+          <Route path="/posts" exact component={posts} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -31,7 +31,6 @@ class Category extends Component {
     });
   };
   handleChange = (e) => {
-    console.log(e);
     const value = e.target.value;
     this.setState({
       ...this.state,
@@ -46,17 +45,21 @@ class Category extends Component {
       this.setState({
         cat_title: "",
       });
-
-      toast.success(res.message, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      if (res) {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      } else {
+        toast.error(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     });
   };
 
   componentDidMount = () => {
     getCategory()
       .then((res) => {
-        console.log(res);
         this.setState({
           categoryList: res.data.categories,
         });
@@ -66,8 +69,11 @@ class Category extends Component {
   };
 
   handleDelete = (id) => {
+    // this.setState({loader: true})
+    // let Data = this.state.categoryList;
     delCategory(id).then((res) => {
       console.log(res);
+      // this.setState({loader: false})
       if (res) {
         toast.success(res.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -76,7 +82,6 @@ class Category extends Component {
           delmodal: false,
         });
         this.setState({ loader: false });
-
       } else {
         console.log("Not Able to Delete");
       }
