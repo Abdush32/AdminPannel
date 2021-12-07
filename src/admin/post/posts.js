@@ -4,6 +4,7 @@ import Sidebar from "../Sidebar";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { getCategory } from "../../api/category";
+import { create_post } from "../../api/post";
 
 class posts extends Component {
   constructor(props) {
@@ -12,24 +13,46 @@ class posts extends Component {
       convertedText: "Some default content",
       setConvertedText: "",
       categoryList: [],
-      post_thumbnail: "",
+      post_thumbnail: null,
       post_title: "",
+      hashtag: [],
       post_description: "",
       category_id: "",
+      thumbnail_url: "",
     };
   }
 
   handleChange = (e) => {
-    console.log(e);
     let value = e.target.value;
+    console.log(value);
     this.setState({
       ...this.state,
       [e.target.name]: value,
     });
   };
 
-  handleChange = (setConvertedText) => {
-    console.log("onChange", setConvertedText);
+  handleChangeHashtag = (e) => {
+    let value = e.target.value;
+    console.log(value);
+    var hashtagArray = value.split(" ");
+    this.setState({
+      ...this.state,
+      [e.target.name]: hashtagArray,
+    });
+  };
+
+  onFileChange = (e) => {
+    e.preventDefault();
+    this.setState({
+      post_thumbnail: e.target.files[0],
+      thumbnail_url: URL.createObjectURL(e.target.files[0]),
+    });
+
+  };
+
+  handleChangeone = (post_description) => {
+    console.log("onChange");
+    this.setState({ post_description });
   };
   modules = {
     toolbar: [
@@ -73,7 +96,19 @@ class posts extends Component {
       .catch((err) => console.log(err));
   };
 
-  handleChangecategory = (e) => {};
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(this.state);
+    const formData = new FormData();
+    await formData.append("post_thumbnail", this.state.post_thumbnail);
+    await formData.append("post_title", this.state.post_title);
+    await formData.append("hashtag", this.state.hashtag);
+    await formData.append("post_description", this.state.post_description);
+    await formData.append("category_id", this.state.category_id);
+    create_post(formData).then((res) => {
+      console.log(res);
+    });
+  };
 
   render() {
     return (
@@ -86,7 +121,7 @@ class posts extends Component {
               <div class="col-md-6">
                 <div class="card card-primary">
                   <div class="card-header">Post Form</div>
-                  <form>
+                  <form onSubmit={this.handleSubmit}>
                     <div class="card-body">
                       <div class="form-group">
                         <label for="exampleInputFile">upload thumbnail</label>
@@ -97,6 +132,7 @@ class posts extends Component {
                               class="custom-file-input"
                               id="post_thumbnail"
                               name="post_thumbnail"
+                              onChange={this.onFileChange}
                             />
                             <label
                               class="custom-file-label"
@@ -109,23 +145,35 @@ class posts extends Component {
                             <span class="input-group-text">Upload</span>
                           </div>
                         </div>
-
                         <div class="form-group">
-                          <label for="title">Enter Title</label>
+                          <label for="usr">post_title</label>
                           <input
                             type="text"
                             class="form-control"
-                            id="title"
-                            placeholder="Enter title"
+                            id="post_title"
+                            name="post_title"
+                            onChange={this.handleChange}
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label for="hashtag">hashtag</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="hashtag"
+                            name="hashtag"
+                            onChange={this.handleChangeHashtag}
                           />
                         </div>
 
                         <div class="form-group">
                           <label for="category">Category</label>
                           <select
-                            class="custom-select mb-3"
-                            id="post_title"
-                            class="post_title"
+                            class="form-control"
+                            id="category_id"
+                            class="category_id"
+                            name="category_id"
+                            onChange={this.handleChange}
                           >
                             <option selected>Choose category...</option>
                             {this.state.categoryList.length > 0 &&
@@ -139,10 +187,12 @@ class posts extends Component {
                         <div class="form-group">
                           <ReactQuill
                             theme="snow"
+                            name="post_description"
+                            id="post_description"
                             modules={this.modules}
                             formats={this.formats}
-                            value={this.state.convertedText}
-                            onChange={this.handleChange}
+                            value={this.state.post_description}
+                            onChange={this.handleChangeone}
                             style={{ minHeight: "300px" }}
                           />
                         </div>
@@ -157,12 +207,14 @@ class posts extends Component {
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="card card-success">
+                <div
+                  class="card card-success"
+                  style={{ height: "250px", width: "100%" }}
+                >
                   <div class="card-header">Preview</div>
                   <img
-                    src="https://images.pexels.com/photos/10346632/pexels-photo-10346632.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                    src={this.state.thumbnail_url}
                     class="img-thumbnail img-responsive"
-                    style={{ height: "250px", width: "100%" }}
                   />
                 </div>
               </div>

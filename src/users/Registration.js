@@ -196,7 +196,6 @@ export default class Registration extends Component {
                 </button>
                 &nbsp;
                 <Link to="./Signin">
-                  {" "}
                   <button type="submit" class="btn btn-secondary">
                     Login
                   </button>

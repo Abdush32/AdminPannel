@@ -1,5 +1,3 @@
-
-
 const baseUrl = "https://blogmitiz.readandfeel.in/api/v1/auth/registers";
 const baseUrl2 = "https://blogmitiz.readandfeel.in/api/v1/auth/login";
 
