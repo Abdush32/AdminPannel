@@ -5,7 +5,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { getCategory } from "../../api/category";
 import { create_post } from "../../api/post";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 class posts extends Component {
   constructor(props) {
     super(props);
@@ -41,13 +42,12 @@ class posts extends Component {
     });
   };
 
-  onFileChange = (e) => {
+  onFileChange = async (e) => {
     e.preventDefault();
-    this.setState({
+    await this.setState({
       post_thumbnail: e.target.files[0],
       thumbnail_url: URL.createObjectURL(e.target.files[0]),
     });
-
   };
 
   handleChangeone = (post_description) => {
@@ -84,7 +84,6 @@ class posts extends Component {
   ];
 
   componentDidMount = () => {
-    console.log("ehllo");
     getCategory()
       .then((res) => {
         console.log(res);
@@ -102,14 +101,44 @@ class posts extends Component {
     const formData = new FormData();
     await formData.append("post_thumbnail", this.state.post_thumbnail);
     await formData.append("post_title", this.state.post_title);
-    await formData.append("hashtag", this.state.hashtag);
     await formData.append("post_description", this.state.post_description);
     await formData.append("category_id", this.state.category_id);
-    create_post(formData).then((res) => {
+    console.log(this.state.post_thumbnail);
+
+    // let config = {
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer 45|2KCb5dIbLI1hB1YnJ9VCEuuygH42O4cff7KC4u9t`,
+    //   },
+    // };
+    // await axios
+    //   .post(
+    //     "https://blogmitiz.readandfeel.in/api/v1/post/create_post",
+    //     formData,
+    //     config
+    //   )
+    
+    //   .then((res) => {
+    //   if (res) {
+    //     toast.success(res.message, {
+    //       position: toast.POSITION.TOP_RIGHT,
+    //     });
+    //     console.log('successfulli');
+    //   }else{
+    //     console.log('not Successfuli');
+    //   }
+   
+    //   });
+    // create_post(this.state).then((res)=>{
+    //   console.log(res);
+    // })
+    create_post(formData).then((res)=>{
       console.log(res);
-    });
+    })
   };
 
+  
   render() {
     return (
       <div>

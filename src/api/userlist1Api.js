@@ -51,18 +51,4 @@ export const deleteData = (id) => {
       console.log("res",res);
       return res;
     });
-  // return fetch(`${getOnedata}/${id}`, {
-  //   method: "DELETE",
-  //   headers: {
-  //     Accept: "application/json",
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${token}`,
-  //   },
-  //   body: JSON.stringify(),
-  // })
-  //   .then((res) => {
-  //     console.log(res);
-  //     return res.json();
-  //   })
-  //   .catch((err) => console.log(err));
 };
