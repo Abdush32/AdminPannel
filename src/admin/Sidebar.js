@@ -131,10 +131,10 @@ class Sidebar extends Component {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <a href="pages/UI/buttons.html" className="nav-link">
+                      <Link to="/Allpost" className="nav-link">
                         <i className="far fa-circle nav-icon" />
-                        <p>Buttons</p>
-                      </a>
+                        <p>All_Post</p>
+                      </Link>
                     </li>
                     <li className="nav-item">
                       <a href="pages/UI/sliders.html" className="nav-link">

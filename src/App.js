@@ -12,6 +12,9 @@ import { ToastContainer } from "react-toastify";
 import Category from "./admin/cate/Category";
 import singleCate from "./admin/cate/singleCate";
 import posts from "./admin/post/posts";
+import Allpost from "./admin/post/Allpost";
+import singlePost from "./admin/post/singlePost";
+
 
 const App = () => {
   return (
@@ -28,6 +31,8 @@ const App = () => {
           <Route path="/Category" exact component={Category} />
           <Route path="/singleCate/:id" exact component={singleCate} />
           <Route path="/posts" exact component={posts} />
+          <Route path="/Allpost" exact component={Allpost} />
+          <Route path="/singlePost/:id" exact component={singlePost} />
         </Switch>
       </BrowserRouter>
     </div>

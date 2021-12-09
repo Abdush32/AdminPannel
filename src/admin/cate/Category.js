@@ -45,7 +45,7 @@ class Category extends Component {
       this.setState({
         cat_title: "",
       });
-      if (res) {
+      if (res.status) {
         toast.success(res.message, {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -63,13 +63,13 @@ class Category extends Component {
         this.setState({
           categoryList: res.data.categories,
         });
-        this.setState({ loader: false });
+        this.setState({loader: false});
       })
       .catch((err) => console.log(err));
   };
 
   handleDelete = (id) => {
-    // this.setState({loader: true})
+
     // let Data = this.state.categoryList;
     delCategory(id).then((res) => {
       console.log(res);
@@ -142,9 +142,8 @@ class Category extends Component {
                       <h3 class="card-title">
                         DataTable with minimal features & hover style
                       </h3>
-                    </div>
-
-                    <div class="card-body">
+                     </div>                  
+                     <div class="card-body">
                       <table
                         id="example2"
                         class="table table-bordered table-hover"
@@ -153,6 +152,7 @@ class Category extends Component {
                           <tr>
                             <th>Id</th>
                             <th>Title</th>
+                            <th>Totalpost</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -172,6 +172,7 @@ class Category extends Component {
                               <tr key={index}>
                                 <td>{ele.id}</td>
                                 <td>{ele.cat_title}</td>
+                                <td>{ele.total_post}</td>
                                 <td>
                                   <Link to={`/singleCate/${ele.id}`}>
                                     <i class="fas fa-pen"></i>
@@ -249,6 +250,7 @@ class Category extends Component {
                     placeholder="Enter your  Category"
                     value={this.state.cat_title}
                     onChange={this.handleChange}
+                    required="required"
                   />
                 </div>
                 <div class="text-center">

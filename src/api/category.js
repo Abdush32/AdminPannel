@@ -1,5 +1,9 @@
 const baseUrl = "https://blogmitiz.readandfeel.in/api/v1/post";
-const token = "45|2KCb5dIbLI1hB1YnJ9VCEuuygH42O4cff7KC4u9t";
+const localdata =  JSON.parse(localStorage.getItem("data"))
+const token = localdata.token;
+console.log(token);
+
+
 
 
 export const createCate = (cate) => {

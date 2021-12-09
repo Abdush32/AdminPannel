@@ -3,18 +3,19 @@ import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { singlePost_api } from "../../api/post";
 import { getCategory } from "../../api/category";
-import { create_post } from "../../api/post";
-import axios from "axios";
-import { toast } from "react-toastify";
-class posts extends Component {
+class singlePost extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      getSinglePost: [],
+      loader: true,
       convertedText: "Some default content",
       setConvertedText: "",
       categoryList: [],
       post_thumbnail: null,
+      post_id: "",
       post_title: "",
       hashtag: [],
       post_description: "",
@@ -32,122 +33,28 @@ class posts extends Component {
     });
   };
 
-  handleChangeHashtag = (e) => {
-    let value = e.target.value;
-    console.log(value);
-    var hashtagArray = value.split(" ");
-    this.setState({
-      ...this.state,
-      [e.target.name]: hashtagArray,
-    });
-    console.log(this.state.hashtagArray);
-  };
-
-  onFileChange = async (e) => {
-    e.preventDefault();
-    await this.setState({
-      post_thumbnail: e.target.files[0],
-      thumbnail_url: URL.createObjectURL(e.target.files[0]),
-    });
-  };
-
-  handleChangeone = (post_description) => {
-    console.log("onChange");
-    this.setState({ post_description });
-  };
-  modules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image"],
-      ["clean"],
-    ],
-  };
-
-  formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "indent",
-    "link",
-    "image",
-  ];
-
-  componentDidMount = () => {
+componentDidMount = () => {
     getCategory()
-      .then((res) => {
-        console.log(res);
-        this.setState({
-          categoryList: res.data.categories,
-        });
-        console.log(this.state.categoryList);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(this.state);
-    const formData = new FormData();
-    await formData.append("post_thumbnail", this.state.post_thumbnail);
-    await formData.append("post_title", this.state.post_title);
-    let hastag = this.state.hashtag;
-    hastag.forEach((hastag) => formData.append("hashtag[]", hastag));
-    await formData.append("post_description", this.state.post_description);
-    await formData.append("category_id", this.state.category_id);
-    console.log(this.state.post_thumbnail);
-
-    // let config = {
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer 45|2KCb5dIbLI1hB1YnJ9VCEuuygH42O4cff7KC4u9t`,
-    //   },
-    // };
-    // await axios
-    //   .post(
-    //     "https://blogmitiz.readandfeel.in/api/v1/post/create_post",
-    //     formData,
-    //     config
-    //   )
-
-    //   .then((res) => {
-    //   if (res) {
-    //     toast.success(res.message, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //     console.log('successfulli');
-    //   }else{
-    //     console.log('not Successfuli');
-    //   }
-
-    //   });
-    // create_post(this.state).then((res)=>{
-    //   console.log(res);
-    // })
-    create_post(formData).then((res) => {
+    .then((res) => {
       console.log(res);
-      if (res) {
-        toast.success(res.message, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      } else {
-        toast.error(res.message, {
-          position: toast.POSITION.TOP_RIGHT,
-          background:"red !important"
-        });
-      }
+      this.setState({
+        categoryList: res.data.categories,
+      });
+      console.log(this.state.categoryList);
+    })
+    .catch((err) => console.log(err));
+    singlePost_api(this.props.match.params.id).then((res) => {
+      console.log(res);
+      this.setState({
+        post_id: res.data.posts.post_id,
+        post_title: res.data.posts.post_title,
+        hashtags: res.data.posts.hashtags.hashtag,
+        post_description: res.data.posts.post_description,
+        category_id:res.data.posts.category.id,
+        post_thumbnail: res.data.posts.post_thumbnail,
+        loader: false,
+      });
+      console.log(this.state.category_id);
     });
   };
 
@@ -173,6 +80,7 @@ class posts extends Component {
                               class="custom-file-input"
                               id="post_thumbnail"
                               name="post_thumbnail"
+                              
                               onChange={this.onFileChange}
                             />
                             <label
@@ -193,6 +101,7 @@ class posts extends Component {
                             class="form-control"
                             id="post_title"
                             name="post_title"
+                            value={this.state.post_title}
                             onChange={this.handleChange}
                           />
                         </div>
@@ -203,6 +112,7 @@ class posts extends Component {
                             class="form-control"
                             id="hashtag"
                             name="hashtag"
+                            value={this.state.hashtag}
                             onChange={this.handleChangeHashtag}
                           />
                         </div>
@@ -215,8 +125,9 @@ class posts extends Component {
                             class="category_id"
                             name="category_id"
                             onChange={this.handleChange}
+                            value={this.state.category_id}
                           >
-                            <option selected>Choose category...</option>
+                            <option>Choose category...</option>
                             {this.state.categoryList.length > 0 &&
                               this.state.categoryList.map((ele, index) => (
                                 <option value={ele.id} key={index + 1}>
@@ -239,7 +150,7 @@ class posts extends Component {
                         </div>
                         <div class="form-group">
                           <button type="submit" class="btn btn-primary">
-                            Submit
+                            update
                           </button>
                         </div>
                       </div>
@@ -254,7 +165,7 @@ class posts extends Component {
                 >
                   <div class="card-header">Preview</div>
                   <img
-                    src={this.state.thumbnail_url}
+                    src={this.state.post_thumbnail}
                     class="img-thumbnail img-responsive"
                   />
                 </div>
@@ -267,4 +178,4 @@ class posts extends Component {
   }
 }
 
-export default posts;
+export default singlePost;
