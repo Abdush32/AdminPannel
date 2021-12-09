@@ -48,13 +48,13 @@ componentDidMount = () => {
       this.setState({
         post_id: res.data.posts.post_id,
         post_title: res.data.posts.post_title,
-        hashtags: res.data.posts.hashtags.hashtag,
+        hashtag: res.data.posts.hashtags,
         post_description: res.data.posts.post_description,
         category_id:res.data.posts.category.id,
         post_thumbnail: res.data.posts.post_thumbnail,
         loader: false,
       });
-      console.log(this.state.category_id);
+      console.log(this.state.hashtag);
     });
   };
 
@@ -107,14 +107,20 @@ componentDidMount = () => {
                         </div>
                         <div class="form-group">
                           <label for="hashtag">hashtag</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="hashtag"
-                            name="hashtag"
-                            value={this.state.hashtag}
-                            onChange={this.handleChangeHashtag}
-                          />
+                          {
+                            this.state.hashtag.forEach((obj, i) => (
+                              // console.log(obj.hashtag.toString())
+                              
+                              <input
+                                type="text"
+                                class="form-control"
+                                id="hashtag"
+                                name="hashtag"
+                                value={obj.hashtag.toString()}
+                                onChange={this.handleChangeHashtag}
+                              />
+                              ))
+                          }
                         </div>
 
                         <div class="form-group">
