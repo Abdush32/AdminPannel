@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const baseUrl = "https://blogmitiz.readandfeel.in/api/v1/post";
-const token = "4|wkPWTH32vbWiYxxYCUJ7NbLgRADb5o3g43OkzF5N";
+const localdata = JSON.parse(localStorage.getItem("data"));
+const token = localdata.token;
 
 export const create_post = (formData) => {
   return axios
@@ -17,8 +18,6 @@ export const create_post = (formData) => {
       return res;
     });
 };
-
-
 
 export const getPost = () => {
   console.log();
@@ -50,4 +49,34 @@ export const singlePost_api = (id) => {
       return res.json();
     })
     .catch((err) => console.log(err));
+};
+// delete_post
+export const delPost = (id) => {
+  return fetch(`${baseUrl}/delete_post/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      console.log(res);
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const updatePost = (formData) => {
+  return axios
+    .post(`${baseUrl}/update_post`, formData, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      console.log("res", res);
+      return res;
+    });
 };

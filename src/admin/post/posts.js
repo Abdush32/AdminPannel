@@ -5,7 +5,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { getCategory } from "../../api/category";
 import { create_post } from "../../api/post";
-import axios from "axios";
 import { toast } from "react-toastify";
 class posts extends Component {
   constructor(props) {
@@ -20,6 +19,7 @@ class posts extends Component {
       post_description: "",
       category_id: "",
       thumbnail_url: "",
+      
     };
   }
 
@@ -145,7 +145,6 @@ class posts extends Component {
       } else {
         toast.error(res.message, {
           position: toast.POSITION.TOP_RIGHT,
-          background:"red !important"
         });
       }
     });
@@ -215,8 +214,7 @@ class posts extends Component {
                             class="category_id"
                             name="category_id"
                             onChange={this.handleChange}
-                          >
-                            <option selected>Choose category...</option>
+                          > <option selected>Choose category...</option>
                             {this.state.categoryList.length > 0 &&
                               this.state.categoryList.map((ele, index) => (
                                 <option value={ele.id} key={index + 1}>
@@ -225,6 +223,7 @@ class posts extends Component {
                               ))}
                           </select>
                         </div>
+
                         <div class="form-group">
                           <ReactQuill
                             theme="snow"

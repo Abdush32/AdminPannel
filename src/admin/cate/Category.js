@@ -16,6 +16,7 @@ class Category extends Component {
       categoryList: [],
       loader: true,
       modal: false,
+      deletId:null,
       delmodal: false,
     };
   }
@@ -25,9 +26,10 @@ class Category extends Component {
       modal: !this.state.modal,
     });
   };
-  deltoggle = () => {
+  deltoggle = (id) => {
     this.setState({
       delmodal: !this.state.delmodal,
+      deletId:id,
     });
   };
   handleChange = (e) => {
@@ -63,13 +65,12 @@ class Category extends Component {
         this.setState({
           categoryList: res.data.categories,
         });
-        this.setState({loader: false});
+        this.setState({ loader: false });
       })
       .catch((err) => console.log(err));
   };
 
   handleDelete = (id) => {
-
     // let Data = this.state.categoryList;
     delCategory(id).then((res) => {
       console.log(res);
@@ -142,8 +143,8 @@ class Category extends Component {
                       <h3 class="card-title">
                         DataTable with minimal features & hover style
                       </h3>
-                     </div>                  
-                     <div class="card-body">
+                    </div>
+                    <div class="card-body">
                       <table
                         id="example2"
                         class="table table-bordered table-hover"
@@ -178,43 +179,13 @@ class Category extends Component {
                                     <i class="fas fa-pen"></i>
                                   </Link>
                                   &nbsp; &nbsp; &nbsp;
-                                  <Link onClick={this.deltoggle}>
+                                  <Link onClick={() => this.deltoggle(ele.id)}>
                                     <i
                                       class="fa fa-trash"
                                       style={{ color: "red" }}
                                     ></i>
                                   </Link>
-                                  <div>
-                                    <Modal
-                                      isOpen={this.state.delmodal}
-                                      deltoggle={this.deltoggle}
-                                      className={this.props.className}
-                                    >
-                                      <ModalHeader deltoggle={this.deltoggle}>
-                                        Category
-                                      </ModalHeader>
-                                      <ModalBody>
-                                        <h6>Are you Sure to delete ...</h6>
-                                      </ModalBody>
-                                      <ModalFooter>
-                                        <Button
-                                          color="info"
-                                          type="submit"
-                                          onClick={() =>
-                                            this.handleDelete(ele.id)
-                                          }
-                                        >
-                                          Yes
-                                        </Button>{" "}
-                                        <Button
-                                          color="danger"
-                                          onClick={this.deltoggle}
-                                        >
-                                          No
-                                        </Button>
-                                      </ModalFooter>
-                                    </Modal>
-                                  </div>
+                                  <div></div>
                                 </td>
                               </tr>
                             ))
@@ -223,7 +194,30 @@ class Category extends Component {
                       </table>
                     </div>
                   </div>
-
+                  <Modal
+                    isOpen={this.state.delmodal}
+                    deltoggle={this.deltoggle}
+                    className={this.props.className}
+                  >
+                    <ModalHeader deltoggle={this.deltoggle}>
+                      Category
+                    </ModalHeader>
+                    <ModalBody>
+                      <h6>Are you Sure to delete ...</h6>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="info"
+                        type="submit"
+                        onClick={() => this.handleDelete(this.state.deletId)}
+                      >
+                        Yes
+                      </Button>{" "}
+                      <Button color="danger" onClick={this.deltoggle}>
+                        No
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
                   <div class="card"></div>
                 </div>
               </div>

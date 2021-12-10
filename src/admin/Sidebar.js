@@ -137,10 +137,10 @@ class Sidebar extends Component {
                       </Link>
                     </li>
                     <li className="nav-item">
-                      <a href="pages/UI/sliders.html" className="nav-link">
+                      <Link to="/Allusers" className="nav-link">
                         <i className="far fa-circle nav-icon" />
-                        <p>Sliders</p>
-                      </a>
+                        <p>All_users</p>
+                      </Link>
                     </li>
                     <li className="nav-item">
                       <a href="pages/UI/modals.html" className="nav-link">

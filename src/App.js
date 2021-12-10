@@ -14,6 +14,7 @@ import singleCate from "./admin/cate/singleCate";
 import posts from "./admin/post/posts";
 import Allpost from "./admin/post/Allpost";
 import singlePost from "./admin/post/singlePost";
+import AllUsers from "./users/AllUsers";
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/posts" exact component={posts} />
           <Route path="/Allpost" exact component={Allpost} />
           <Route path="/singlePost/:id" exact component={singlePost} />
+          <Route path="/AllUsers" exact component={AllUsers} />
         </Switch>
       </BrowserRouter>
     </div>

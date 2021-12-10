@@ -3,8 +3,9 @@ import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { singlePost_api } from "../../api/post";
+import { create_post, singlePost_api, updatePost } from "../../api/post";
 import { getCategory } from "../../api/category";
+import { toast } from "react-toastify";
 class singlePost extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +22,7 @@ class singlePost extends Component {
       post_description: "",
       category_id: "",
       thumbnail_url: "",
+      hashtag_string: "",
     };
   }
 
@@ -33,16 +35,56 @@ class singlePost extends Component {
     });
   };
 
-componentDidMount = () => {
+  onFileChange = async (e) => {
+    e.preventDefault();
+    await this.setState({
+      post_thumbnail: e.target.files[0],
+      thumbnail_url: URL.createObjectURL(e.target.files[0]),
+    });
+  };
+  handleChangeone = (post_description) => {
+    this.setState({ post_description });
+  };
+
+  modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [
+        { list: "ordered" },
+        { list: "bullet" },
+        { indent: "-1" },
+        { indent: "+1" },
+      ],
+      ["link", "image"],
+      ["clean"],
+    ],
+  };
+
+  formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+  ];
+
+  componentDidMount = () => {
     getCategory()
-    .then((res) => {
-      console.log(res);
-      this.setState({
-        categoryList: res.data.categories,
-      });
-      console.log(this.state.categoryList);
-    })
-    .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          categoryList: res.data.categories,
+        });
+        console.log(this.state.categoryList);
+      })
+      .catch((err) => console.log(err));
     singlePost_api(this.props.match.params.id).then((res) => {
       console.log(res);
       this.setState({
@@ -50,11 +92,55 @@ componentDidMount = () => {
         post_title: res.data.posts.post_title,
         hashtag: res.data.posts.hashtags,
         post_description: res.data.posts.post_description,
-        category_id:res.data.posts.category.id,
-        post_thumbnail: res.data.posts.post_thumbnail,
+        category_id: res.data.posts.category.id,
+        thumbnail_url: res.data.posts.post_thumbnail,
         loader: false,
       });
-      console.log(this.state.hashtag);
+      const abc = [];
+      {
+        this.state.hashtag.map((item, i) => abc.push(item.hashtag));
+      }
+      this.setState({
+        hashtag: abc.toString().split(/[,]+/).join(" "),
+      });
+    });
+  };
+
+  handleChangeHashtag = (e) => {
+    let value = e.target.value;
+    console.log(value);
+    var hashtagArray = value.split(" ");
+    this.setState({
+      ...this.state,
+      [e.target.name]: hashtagArray,
+    });
+    console.log(this.state.hashtag);
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(this.state);
+    const formData = new FormData();
+    await formData.append("post_id",this.state.post_id);
+    await formData.append("post_thumbnail", this.state.post_thumbnail);
+    await formData.append("post_title", this.state.post_title);
+    // let hastag = this.state.hashtag;
+    // await formData.append("hashtag",this.state.hashtag)
+    // hastag.forEach((hastag) => formData.append("hashtag[]", hastag));
+    await formData.append("post_description", this.state.post_description);
+    await formData.append("category_id", this.state.category_id);
+    console.log(this.state.post_thumbnail);
+    updatePost(formData).then((res) => {
+      console.log(res);
+      if (res.status) {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        }); 
+      } else {
+        toast.error(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     });
   };
 
@@ -80,7 +166,6 @@ componentDidMount = () => {
                               class="custom-file-input"
                               id="post_thumbnail"
                               name="post_thumbnail"
-                              
                               onChange={this.onFileChange}
                             />
                             <label
@@ -107,20 +192,15 @@ componentDidMount = () => {
                         </div>
                         <div class="form-group">
                           <label for="hashtag">hashtag</label>
-                          {
-                            this.state.hashtag.forEach((obj, i) => (
-                              // console.log(obj.hashtag.toString())
-                              
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="hashtag"
-                                name="hashtag"
-                                value={obj.hashtag.toString()}
-                                onChange={this.handleChangeHashtag}
-                              />
-                              ))
-                          }
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="hashtag"
+                            name="hashtag"
+                            value={this.state.hashtag}
+                            onChange={this.handleChangeHashtag}
+                          />
                         </div>
 
                         <div class="form-group">
@@ -171,7 +251,7 @@ componentDidMount = () => {
                 >
                   <div class="card-header">Preview</div>
                   <img
-                    src={this.state.post_thumbnail}
+                    src={this.state.thumbnail_url}
                     class="img-thumbnail img-responsive"
                   />
                 </div>

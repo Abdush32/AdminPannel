@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Link } from "react-router-dom";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
-import { getPost } from "../../api/post";
-import { Link } from "react-router-dom";
+import { delPost, getPost } from "../../api/post";
+import { toast } from "react-toastify";
 import { Spinner } from "reactstrap";
-
 
 class Allpost extends Component {
   constructor(props) {
@@ -13,21 +14,45 @@ class Allpost extends Component {
       cat_title: "",
       Allpostdata: [],
       loader: true,
-   
+      delmodal: false,
+      deletId:null,
     };
   }
-componentDidMount = () => {
-  getPost().then((res) => {
-    console.log(res);
+  deltoggle = (id) => {
     this.setState({
-      Allpostdata: res.data.posts
-    })
-    this.setState({loader: false});
-  }).catch((err) => console.log(err))
-}
+      delmodal: !this.state.delmodal,
+      deletId:id
+    });
+  };
+  componentDidMount = () => {
+    getPost()
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          Allpostdata: res.data.posts,
+        });
+        this.setState({ loader: false });
+      })
+      .catch((err) => console.log(err));
+  };
 
+  handleDelete = (id) => {
+    delPost(id).then((res) => {
+      console.log(res);
 
-
+      if (res) {
+        toast.success(res.message, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        this.setState({
+          delmodal: false,
+        });
+        this.setState({ loader: false });
+      } else {
+        console.log("Not Able to Delete");
+      }
+    });
+  };
 
   render() {
     return (
@@ -35,7 +60,6 @@ componentDidMount = () => {
         <Navbar />
         <Sidebar />
         <div class="content-wrapper">
-         
           <section class="content">
             <div class="container-fluid">
               <div class="row">
@@ -45,8 +69,8 @@ componentDidMount = () => {
                       <h3 class="card-title">
                         DataTable with minimal features & hover style
                       </h3>
-                     </div>                  
-                     <div class="card-body">
+                    </div>
+                    <div class="card-body">
                       <table
                         id="example2"
                         class="table table-bordered table-hover"
@@ -76,7 +100,17 @@ componentDidMount = () => {
                             this.state.Allpostdata.map((ele, index) => (
                               <tr key={index}>
                                 <td>{ele.post_id}</td>
-                                <td><img src={ele.post_thumbnail} className="img-fluid" style={{width:"50px",height:"50px",borderRadius:"5px"}} /></td>
+                                <td>
+                                  <img
+                                    src={ele.post_thumbnail}
+                                    className="img-fluid"
+                                    style={{
+                                      width: "50px",
+                                      height: "50px",
+                                      borderRadius: "5px",
+                                    }}
+                                  />
+                                </td>
                                 <td>{ele.post_title}</td>
                                 <td>{ele.category.cat_title}</td>
                                 <td>{ele.user.name}</td>
@@ -85,15 +119,13 @@ componentDidMount = () => {
                                     <i class="fas fa-pen"></i>
                                   </Link>
                                   &nbsp; &nbsp; &nbsp;
-                                  <Link onClick={this.deltoggle}>
+                                  <Link onClick={() => this.deltoggle(ele.post_id)}>
                                     <i
                                       class="fa fa-trash"
                                       style={{ color: "red" }}
                                     ></i>
                                   </Link>
-                                  <div>
-                                   
-                                  </div>
+                                
                                 </td>
                               </tr>
                             ))
@@ -104,14 +136,41 @@ componentDidMount = () => {
                   </div>
 
                   <div class="card"></div>
+                  <div>
+                                    <Modal
+                                      isOpen={this.state.delmodal}
+                                      deltoggle={this.deltoggle}
+                                      className={this.props.className}
+                                    >
+                                      <ModalHeader deltoggle={this.deltoggle}>
+                                        Category
+                                      </ModalHeader>
+                                      <ModalBody>
+                                        <h6>Are you Sure to delete ...</h6>
+                                      </ModalBody>
+                                      <ModalFooter>
+                                        <Button
+                                          color="info"
+                                          type="submit"
+                                          onClick={() =>
+                                            this.handleDelete(this.state.deletId)
+                                          }
+                                        >
+                                          Yes
+                                        </Button>{" "}
+                                        <Button
+                                          color="danger"
+                                          onClick={this.deltoggle}
+                                        >
+                                          No
+                                        </Button>
+                                      </ModalFooter>
+                                    </Modal>
+                                  </div>
                 </div>
               </div>
             </div>
           </section>
-        </div>
-
-        <div>
-          
         </div>
       </div>
     );
