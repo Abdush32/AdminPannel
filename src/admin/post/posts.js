@@ -6,6 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import { getCategory } from "../../api/category";
 import { create_post } from "../../api/post";
 import { toast } from "react-toastify";
+import { Spinner } from "reactstrap";
 class posts extends Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,7 @@ class posts extends Component {
       post_description: "",
       category_id: "",
       thumbnail_url: "",
-      
+      loader: false,
     };
   }
 
@@ -107,7 +108,7 @@ class posts extends Component {
     await formData.append("post_description", this.state.post_description);
     await formData.append("category_id", this.state.category_id);
     console.log(this.state.post_thumbnail);
-
+    this.setState({ loader: true });
     // let config = {
     //   headers: {
     //     Accept: "application/json",
@@ -122,26 +123,14 @@ class posts extends Component {
     //     config
     //   )
 
-    //   .then((res) => {
-    //   if (res) {
-    //     toast.success(res.message, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //     console.log('successfulli');
-    //   }else{
-    //     console.log('not Successfuli');
-    //   }
-
-    //   });
-    // create_post(this.state).then((res)=>{
-    //   console.log(res);
-    // })
     create_post(formData).then((res) => {
       console.log(res);
-      if (res) {
-        toast.success(res.message, {
+      this.setState({ loader: false });
+      if (res.data.status) {
+        toast.success(res.data.message, {
           position: toast.POSITION.TOP_RIGHT,
         });
+        this.props.history.push("./Allpost");
       } else {
         toast.error(res.message, {
           position: toast.POSITION.TOP_RIGHT,
@@ -155,6 +144,18 @@ class posts extends Component {
       <div>
         <Navbar />
         <Sidebar />
+        {/* <section class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1>Add posts</h1>
+                </div>
+                <div class="col-sm-6">
+              
+                </div>
+              </div>
+            </div>
+          </section> */}
         <section class="content" style={{ marginLeft: "350px" }}>
           <div class="container-fluid">
             <div class="row">
@@ -214,7 +215,9 @@ class posts extends Component {
                             class="category_id"
                             name="category_id"
                             onChange={this.handleChange}
-                          > <option selected>Choose category...</option>
+                          >
+                            {" "}
+                            <option selected>Choose category...</option>
                             {this.state.categoryList.length > 0 &&
                               this.state.categoryList.map((ele, index) => (
                                 <option value={ele.id} key={index + 1}>
@@ -239,6 +242,14 @@ class posts extends Component {
                         <div class="form-group">
                           <button type="submit" class="btn btn-primary">
                             Submit
+                            {this.state.loader ? (
+                              <Spinner
+                                style={{ width: "1rem", height: "1rem" }}
+                                children={false}
+                              />
+                            ) : (
+                              ""
+                            )}
                           </button>
                         </div>
                       </div>

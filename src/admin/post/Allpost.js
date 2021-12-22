@@ -15,13 +15,13 @@ class Allpost extends Component {
       Allpostdata: [],
       loader: true,
       delmodal: false,
-      deletId:null,
+      deletId: null,
     };
   }
   deltoggle = (id) => {
     this.setState({
       delmodal: !this.state.delmodal,
-      deletId:id
+      deletId: id,
     });
   };
   componentDidMount = () => {
@@ -59,6 +59,24 @@ class Allpost extends Component {
       <div>
         <Navbar />
         <Sidebar />
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>List of posts</h1>
+              </div>
+              <div class="col-sm-6">
+                <Link
+                  to="/posts"
+                  type="button"
+                  class="btn btn-success  float-right"
+                >
+                  Add
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
         <div class="content-wrapper">
           <section class="content">
             <div class="container-fluid">
@@ -119,13 +137,14 @@ class Allpost extends Component {
                                     <i class="fas fa-pen"></i>
                                   </Link>
                                   &nbsp; &nbsp; &nbsp;
-                                  <Link onClick={() => this.deltoggle(ele.post_id)}>
+                                  <Link
+                                    onClick={() => this.deltoggle(ele.post_id)}
+                                  >
                                     <i
                                       class="fa fa-trash"
                                       style={{ color: "red" }}
                                     ></i>
                                   </Link>
-                                
                                 </td>
                               </tr>
                             ))
@@ -137,36 +156,31 @@ class Allpost extends Component {
 
                   <div class="card"></div>
                   <div>
-                                    <Modal
-                                      isOpen={this.state.delmodal}
-                                      deltoggle={this.deltoggle}
-                                      className={this.props.className}
-                                    >
-                                      <ModalHeader deltoggle={this.deltoggle}>
-                                        Category
-                                      </ModalHeader>
-                                      <ModalBody>
-                                        <h6>Are you Sure to delete ...</h6>
-                                      </ModalBody>
-                                      <ModalFooter>
-                                        <Button
-                                          color="info"
-                                          type="submit"
-                                          onClick={() =>
-                                            this.handleDelete(this.state.deletId)
-                                          }
-                                        >
-                                          Yes
-                                        </Button>{" "}
-                                        <Button
-                                          color="danger"
-                                          onClick={this.deltoggle}
-                                        >
-                                          No
-                                        </Button>
-                                      </ModalFooter>
-                                    </Modal>
-                                  </div>
+                    <Modal
+                      isOpen={this.state.delmodal}
+                      deltoggle={this.deltoggle}
+                      className={this.props.className}
+                    >
+                      <ModalHeader deltoggle={this.deltoggle}>
+                        Category
+                      </ModalHeader>
+                      <ModalBody>
+                        <h6>Are you Sure to delete ...</h6>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color="info"
+                          type="submit"
+                          onClick={() => this.handleDelete(this.state.deletId)}
+                        >
+                          Yes
+                        </Button>{" "}
+                        <Button color="danger" onClick={this.deltoggle}>
+                          No
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
+                  </div>
                 </div>
               </div>
             </div>

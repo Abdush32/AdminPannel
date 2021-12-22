@@ -15,6 +15,7 @@ import posts from "./admin/post/posts";
 import Allpost from "./admin/post/Allpost";
 import singlePost from "./admin/post/singlePost";
 import AllUsers from "./users/AllUsers";
+import SingleUser from "./users/SingleUser";
 
 
 const App = () => {
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/Allpost" exact component={Allpost} />
           <Route path="/singlePost/:id" exact component={singlePost} />
           <Route path="/AllUsers" exact component={AllUsers} />
+          <Route path="/SingleUser/:id" exact component={SingleUser} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -86,7 +86,7 @@ class AllUsers extends Component {
                                   />
                                 </td>
                                 <td>
-                                  <Link to={`/singlePost/${"ele.post_id"}`}>
+                                  <Link to={`/SingleUser/${ele.user_id}`}>
                                     <i class="fas fa-pen"></i>
                                   </Link>
                                   &nbsp; &nbsp; &nbsp;

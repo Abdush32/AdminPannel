@@ -6,12 +6,13 @@ import "react-quill/dist/quill.snow.css";
 import { create_post, singlePost_api, updatePost } from "../../api/post";
 import { getCategory } from "../../api/category";
 import { toast } from "react-toastify";
+import { Spinner } from "reactstrap";
 class singlePost extends Component {
   constructor(props) {
     super(props);
     this.state = {
       getSinglePost: [],
-      loader: true,
+      loader: false,
       convertedText: "Some default content",
       setConvertedText: "",
       categoryList: [],
@@ -23,6 +24,7 @@ class singlePost extends Component {
       category_id: "",
       thumbnail_url: "",
       hashtag_string: "",
+     
     };
   }
 
@@ -130,14 +132,17 @@ class singlePost extends Component {
     await formData.append("post_description", this.state.post_description);
     await formData.append("category_id", this.state.category_id);
     console.log(this.state.post_thumbnail);
+    this.setState({loader:true})
     updatePost(formData).then((res) => {
       console.log(res);
-      if (res.status) {
-        toast.success(res.message, {
+      this.setState({loader:false})
+      if (res.data.status) {
+        toast.success(res.data.message, {
           position: toast.POSITION.TOP_RIGHT,
         }); 
+        this.props.history.push("/Allpost")
       } else {
-        toast.error(res.message, {
+        toast.error(res.data.message, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -236,7 +241,13 @@ class singlePost extends Component {
                         </div>
                         <div class="form-group">
                           <button type="submit" class="btn btn-primary">
-                            update
+                          update
+                     {this.state.loader ?   <Spinner
+                        style={{ width: "1rem", height: "1rem" }}
+                        children={false}
+                      /> : "" }
+                            
+                         
                           </button>
                         </div>
                       </div>
